@@ -1,0 +1,1 @@
+{"name":"Local: milkvisits","url":"c:\\Users\\Alolaptop\\Desktop\\onthi icpc\\milkvisits.cpp","tests":[{"id":1751250509343,"input":"5 5\nHHGHG\n1 2\n2 3\n2 4\n1 5\n1 4 H\n1 4 G\n1 3 G\n1 3 H\n5 5 H","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\Alolaptop\\Desktop\\onthi icpc\\milkvisits.cpp","group":"local","local":true}
