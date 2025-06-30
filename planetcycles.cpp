@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+ 
 const int maxn  = 2e5 + 10;
 int p[maxn];
 int d[maxn];
@@ -21,12 +21,16 @@ int count(int x){
         a = p[a];
         b = p[b];
     }
-    if(d[a]) return length  + d[a];
-    int cnt = 0;
-    int b = p[a];
+    int first = a;
+    return a;
+    if(d[a]) return 0;
+    b = p[a];
     while(a != b){
-        b = p[b]
+        b = p[b];
+        ++ length;
     }
+    d[a] = length;
+    return length;
 }
 int main(){
     int n;
@@ -36,5 +40,6 @@ int main(){
         cin >> a;
         p[i] = a;
     }
-    for(int i =1 ;i <= n ;i++) cout << count(i) << " ";
+    int ans = 0;
+    for(int i =1 ;i <= n ;i++) cout << count(i) << endl;
 }

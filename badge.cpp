@@ -1,15 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int maxn  = 2e5 + 10;
-int p[maxn];
-int d[maxn];
+int p[1001];
 int succ(int x,int k){
     if(k==1) return p[x];
     return succ(succ(x,k/2),k/2);
 }
 int count(int x){
-    int length = 1;
     int a = p[x];
     int b = p[p[x]];
     while(a != b){
@@ -21,12 +18,7 @@ int count(int x){
         a = p[a];
         b = p[b];
     }
-    if(d[a]) return length  + d[a];
-    int cnt = 0;
-    int b = p[a];
-    while(a != b){
-        b = p[b]
-    }
+    return a;
 }
 int main(){
     int n;
