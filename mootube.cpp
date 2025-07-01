@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int maxn = 5001;
+const int maxn = 100010;
 bool vis[maxn];
 vector<pair<int,int>> adj[maxn];
 
