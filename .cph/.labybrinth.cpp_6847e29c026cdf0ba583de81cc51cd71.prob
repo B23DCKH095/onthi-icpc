@@ -1,0 +1,1 @@
+{"name":"Local: labybrinth","url":"c:\\Users\\Alolaptop\\Desktop\\onthi icpc\\labybrinth.cpp","tests":[{"id":1751302444284,"input":"5 8\n########\n#.A#...#\n#.##.#B#\n#......#\n########","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\Alolaptop\\Desktop\\onthi icpc\\labybrinth.cpp","group":"local","local":true}

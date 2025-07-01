@@ -1,0 +1,1 @@
+{"name":"Local: trackinasnow","url":"c:\\Users\\Alolaptop\\Desktop\\onthi icpc\\trackinasnow.cpp","tests":[{"id":1751283961636,"input":"5 8\nFFR.....\n.FRRR...\n.FFFFF..\n..RRRFFR\n.....FFF\n","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\Alolaptop\\Desktop\\onthi icpc\\trackinasnow.cpp","group":"local","local":true}
