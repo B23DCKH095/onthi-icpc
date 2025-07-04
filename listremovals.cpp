@@ -20,23 +20,21 @@ void add(int k,int x){
 }
 
 int main(){
-    int q;
-    cin >> n >> q;
-    for(int i = 1 ; i<= n ; i++){
+    cin >> n;
+    for(int i = 1; i<= n ;i++){
+        cin >> a[i];
+        add(i,1);
+    }
+    for(int i =1; i <=  n ; i++){
         int x;
         cin >> x;
-        a[i] = x;
-        add(i,x);
-    }
-    while(q--){
-        int t,u,v;
-        cin >> t >> u >> v;
-        if(t==1){
-            add(u,-a[u]);
-            a[u] = v;
-            add(u,v);
-        } else {
-            cout << sum(v)  -sum(u-1) << endl;
+        int l = 1, r = n;
+        while(l < r){
+            int m = l + (r-l)/2;
+            if(x <= sum(m)) r = m;
+            else l = m+1;
         }
+        cout << a[l]<< " ";
+        add(l,-1);
     }
 }
