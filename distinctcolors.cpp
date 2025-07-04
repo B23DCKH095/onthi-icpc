@@ -2,18 +2,27 @@
 using namespace std;
 using ll = long long;
 
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
 
 int timedfs;
 const int maxn =2e5 + 10;
 vector<int> adj[maxn];
 ll d[maxn],id[maxn],val[maxn],tree[maxn];
 int n;
-int st[maxn],en[maxn];
-
+int st[maxn],en[maxn],col[maxn],same[maxn];
 void dfs(int u,int p){
     st[u] = ++ timedfs;
+    int cnt = col[u];
     for(int v: adj[u]){
         if(v==p) continue;
+        if(cnt | col[v] != cnt){
+            ++ same[u];
+            cnt |= col[v];
+        }
+        cout << cnt << endl;
         dfs(v,u);
     }
     en[u] = timedfs;
@@ -33,31 +42,13 @@ void add(int k,int x){
     }
 }
 int main(){
-    int q;
-    cin >> n >> q;
-    for(int i = 1 ; i<= n ; i++) cin >> val[i];
-    for(int i = 0 ; i < n-1 ; i++){
+    cin >> n;
+    for(int i =1; i<= n ;i++) cin >> col[i];
+    for(int i = 0 ; i< n-1; i++){
         int a,b;
         cin >> a >> b;
         adj[a].push_back(b);
         adj[b].push_back(a);
     }
     dfs(1,-1);
-    for(int i = 1; i<= n ; i++) add(st[i],val[i]);
-    for(int i = 0 ; i< q; i ++){
-        int t;
-        cin >> t;
-        if(t==1){
-            int s,x;
-            cin >> s >> x;
-            add(st[s],-val[s]);
-            val[s] = x;
-            add(st[s] ,val[s]);
-        }
-        else {
-            int s;
-            cin >> s;
-            cout << sum(en[s]) - sum(st[s] -1)<< endl;
-        }
-    }
 }
