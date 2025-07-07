@@ -1,29 +1,49 @@
 #include <bits/stdc++.h>
 using namespace std;
-
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
-template <class T>
-using Tree =
-    tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-const int m = 1e9 + 7;
-int main() {
-		Tree<int> tree;
-
-		int arr_len;
-		cin >> arr_len;
-		long long inv_num = 0;
-		for (int i = 0; i < arr_len; i++) {
-			int x;
-			cin >> x;
-			/*
-			 * Calculate the # of elements in the tree
-			 * that are greater than x.
-			 * (.order_of_key(x) gives the # of elements less than x)
-			 */
-			inv_num += tree.order_of_key(x+1)+1;
-            inv_num %= m;
-			tree.insert(x);
+using ll = long long;
+const int mod = 1e9 + 7;
+ 
+const int maxn = 2e5 + 10;
+ll tree[maxn];
+int n;
+ 
+ll sum(int k){
+	ll s= 0;
+	while(k >= 1){
+		s = (s + tree[k])%mod;
+		k -= k&-k;
 	}
-    cout << inv_num%m << endl;
+	return s;
+}
+void add(int k, ll x){
+	while(k <= n){
+		tree[k] = (tree[k] + x) % mod;
+		k += k&-k;
+	}
+}
+int main(){
+	cin >> n;
+	vector<int> a(n),b(n);
+	for(int i = 0 ; i<n ; i++) cin >> a[i];
+	b = a;
+	sort(b.begin() , b.end());
+	int cnt = 0;
+	map<int,int> mp,ct;
+	for(int x : b){
+		if(!mp[x]) mp[x] = ++ cnt;
+	}
+	for(int x : a){
+		ct[x]++;
+		x = mp[x];
+	}
+	set<int> seen;
+
+	for(int x : a){
+		if(seen.find(x) == seen.end()){
+			ll v = sum(x);
+			add(x,v + ct[x]);
+		}
+		seen.insert(x);
+	}
+	cout << sum(n)<< endl;
 }
