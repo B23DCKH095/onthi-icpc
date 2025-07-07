@@ -1,19 +1,14 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <random>
+#include <chrono>
 using namespace std;
+using ll = long long;
 
-const int maxn =2e5 + 10;
-int sieve[maxn];
-int n;
-void calc(){
-    for(int x = 2 ; x <= n ; x++){
-        if(sieve[x])continue;
-        for(int u = 2*x ; u <= n ;u += x){
-            sieve[u] = x;
-        }
-    }
-}
-int main(){
-    cin >> n;
-    calc();
-    for(int i =2; i <= 20 ; i++) cout << sieve[i] <<" ";
+int main() {
+    const ll M = 100;
+    mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count());
+    const ll B = uniform_int_distribution<ll>(0, M - 1)(rng);
+    
+    cout << "Số ngẫu nhiên B trong [0, " << M-1 << "]: " << B << endl;
+    return 0;
 }
