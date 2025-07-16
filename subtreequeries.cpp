@@ -1,63 +1,91 @@
-#include <bits/stdc++.h>
-using namespace std;
-using ll = long long;
+#include <algorithm>
+#include <iostream>
+#include <vector>
 
+using std::cout;
+using std::endl;
+using std::vector;
 
-int timedfs;
-const int maxn =2e5 + 10;
-vector<int> adj[maxn];
-ll d[maxn],id[maxn],val[maxn],tree[maxn];
-int n;
-int st[maxn],en[maxn];
+// BeginCodeSnip{BIT (from PURS module)}
+template <class T> class BIT {
+  private:
+	int size;
+	vector<T> bit;
+	vector<T> arr;
 
-void dfs(int u,int p){
-    st[u] = ++ timedfs;
-    for(int v: adj[u]){
-        if(v==p) continue;
-        dfs(v,u);
-    }
-    en[u] = timedfs;
+  public:
+	BIT(int size) : size(size), bit(size + 1), arr(size) {}
+
+	void set(int ind, int val) { add(ind, val - arr[ind]); }
+
+	void add(int ind, int val) {
+		arr[ind] += val;
+		ind++;
+		for (; ind <= size; ind += ind & -ind) { bit[ind] += val; }
+	}
+
+	T pref_sum(int ind) {
+		ind++;
+		T total = 0;
+		for (; ind > 0; ind -= ind & -ind) { total += bit[ind]; }
+		return total;
+	}
+};
+// EndCodeSnip
+
+vector<vector<int>> neighbors;
+vector<int> start;
+vector<int> end;
+int timer = 0;
+
+void euler_tour(int at, int prev) {
+	start[at] = timer++;
+	for (int n : neighbors[at]) {
+		if (n != prev) { euler_tour(n, at); }
+	}
+	end[at] = timer;
 }
-ll sum(int k){
-    ll s = 0;
-    while(k >= 1){
-        s += tree[k];
-        k-= k&-k;
-    }
-    return s;
-}
-void add(int k,int x){
-    while(k <= n){
-        tree[k] += x;
-        k += k&-k;
-    }
-}
-int main(){
-    int q;
-    cin >> n >> q;
-    for(int i = 1 ; i<= n ; i++) cin >> val[i];
-    for(int i = 0 ; i < n-1 ; i++){
-        int a,b;
-        cin >> a >> b;
-        adj[a].push_back(b);
-        adj[b].push_back(a);
-    }
-    dfs(1,-1);
-    for(int i = 1; i<= n ; i++) add(st[i],val[i]);
-    for(int i = 0 ; i< q; i ++){
-        int t;
-        cin >> t;
-        if(t==1){
-            int s,x;
-            cin >> s >> x;
-            add(st[s],-val[s]);
-            val[s] = x;
-            add(st[s] ,val[s]);
-        }
-        else {
-            int s;
-            cin >> s;
-            cout << sum(en[s]) - sum(st[s] -1)<< endl;
-        }
-    }
+
+int main() {
+	int node_num;
+	int query_num;
+	std::cin >> node_num >> query_num;
+
+	vector<int> vals(node_num);
+	for (int &v : vals) { std::cin >> v; }
+
+	neighbors.resize(node_num);
+	for (int e = 0; e < node_num - 1; e++) {
+		int n1, n2;
+		std::cin >> n1 >> n2;
+		neighbors[--n1].push_back(--n2);
+		neighbors[n2].push_back(n1);
+	}
+
+	start.resize(node_num);
+	end.resize(node_num);
+	euler_tour(0, -1);
+
+	BIT<long long> bit(node_num);
+	for (int i = 0; i < node_num; i++) { bit.set(start[i], vals[i]); }
+	for (int q = 0; q < query_num; q++) {
+		int type;
+		std::cin >> type;
+		if (type == 1) {
+			int node, val;
+			std::cin >> node >> val;
+			bit.set(start[--node], val);
+		} else if (type == 2) {
+			int node;
+			std::cin >> node;
+			long long end_sum = bit.pref_sum(end[--node] - 1);
+			long long start_sum;
+			if (start[node] == 0) {
+				start_sum = 0;
+			} else {
+				start_sum = bit.pref_sum(start[node] - 1);
+			}
+			cout << end_sum - start_sum << '\n';
+		}
+	}
 }
