@@ -3,6 +3,10 @@
         "iostream": "cpp",
         "ostream": "cpp",
         "array": "cpp",
-        "ranges": "cpp"
-    }
+        "ranges": "cpp",
+        "tuple": "cpp",
+        "initializer_list": "cpp",
+        "valarray": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
 }

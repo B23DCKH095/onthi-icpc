@@ -1,13 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
-
+ 
 #define rep(i, a, b) for(int i = a; i < (b); ++i)
 #define all(x) begin(x), end(x)
 #define sz(x) (int)(x).size()
 typedef long long ll;
 typedef pair<int, int> pii;
 typedef vector<int> vi;
-
+ 
 /**
  * Author: Ulf Lundstrom
  * Date: 2009-02-26
@@ -18,7 +18,7 @@ typedef vector<int> vi;
  * Status: Works fine, used a lot
  */
 #pragma once
-
+ 
 template <class T> int sgn(T x) { return (x > 0) - (x < 0); }
 template<class T>
 struct Point {
@@ -48,6 +48,40 @@ struct Point {
           return os << "(" << p.x << "," << p.y << ")"; }
 };
 /**
+ * Author: Stjepan Glavina, chilli
+ * Date: 2019-05-05
+ * License: Unlicense
+ * Source: https://github.com/stjepang/snippets/blob/master/convex_hull.cpp
+ * Description:
+\\begin{minipage}{75mm}
+Returns a vector of the points of the convex hull in counter-clockwise order.
+Points on the edge of the hull between two other points are not considered part of the hull.
+\end{minipage}
+\begin{minipage}{15mm}
+\vspace{-6mm}
+\includegraphics[width=\textwidth]{content/geometry/ConvexHull}
+\vspace{-6mm}
+\end{minipage}
+ * Time: O(n \log n)
+ * Status: stress-tested, tested with kattis:convexhull
+*/
+#pragma once
+ 
+ 
+typedef Point<ll> P;
+vector<P> convexHull(vector<P> pts) {
+     if (sz(pts) <= 1) return pts;
+     sort(all(pts));
+     vector<P> h(sz(pts)+1);
+     int s = 0, t = 0;
+     for (int it = 2; it--; s = --t, reverse(all(pts)))
+          for (P p : pts) {
+               while (t >= s + 2 && h[t-2].cross(h[t-1], p) <= 0) t--;
+               h[t++] = p;
+          }
+     return {h.begin(), h.begin() + t - (t == 2 && h[0] == h[1])};
+};
+/**
  * Author: Victor Lecomte, chilli
  * Date: 2019-04-26
  * License: CC0
@@ -56,64 +90,26 @@ struct Point {
  * Use \texttt{(segDist(s,e,p)<=epsilon)} instead when using Point<double>.
  * Status:
  */
-#pragma once
-
 
 
 template<class P> bool onSegment(P s, P e, P p) {
      return p.cross(s, e) == 0 && (s - p).dot(e - p) <= 0;
 }
-/**
- * Author: Victor Lecomte, chilli
- * Date: 2019-04-27
- * License: CC0
- * Source: https://vlecomte.github.io/cp-geo.pdf
- * Description:\
-\begin{minipage}{75mm}
-If a unique intersection point between the line segments going from s1 to e1 and from s2 to e2 exists then it is returned.
-If no intersection point exists an empty vector is returned.
-If infinitely many exist a vector with 2 elements is returned, containing the endpoints of the common line segment.
-The wrong position will be returned if P is Point<ll> and the intersection point does not have integer coordinates.
-Products of three coordinates are used in intermediate steps so watch out for overflow if using int or long long.
-\end{minipage}
-\begin{minipage}{15mm}
-\includegraphics[width=\textwidth]{content/geometry/SegmentIntersection}
-\end{minipage}
- * Usage:
- * vector<P> inter = segInter(s1,e1,s2,e2);
- * if (sz(inter)==1)
- *   cout << "segments intersect at " << inter[0] << endl;
- * Status: stress-tested, tested on kattis:intersection
- */
-#pragma once
-
-
-
-template<class P> vector<P> segInter(P a, P b, P c, P d) {
-     auto oa = c.cross(d, a), ob = c.cross(d, b),
-          oc = a.cross(b, c), od = a.cross(b, d);
-     // Checks if intersection is single non-endpoint point.
-     if (sgn(oa) * sgn(ob) < 0 && sgn(oc) * sgn(od) < 0)
-          return {(a * ob - b * oa) / (ob - oa)};
-     set<P> s;
-     if (onSegment(c, d, a)) s.insert(a);
-     if (onSegment(c, d, b)) s.insert(b);
-     if (onSegment(a, b, c)) s.insert(c);
-     if (onSegment(a, b, d)) s.insert(d);
-     return {all(s)};
-}
 int main() {
      cin.tie(0)->sync_with_stdio(0);
      cin.exceptions(cin.failbit);
-     int t;
-     cin >> t;
-     while(t--){
-        Point<double> a,b,c,d;
-        cin >> a.x >> a.y >>  b.x >> b.y >> c.x >> c.y >> d.x >> d.y;
-        vector<Point<double>> inter = segInter(a,b,c,d);
-        if(sz(inter) == 0){
-            cout <<"NO"<< endl;
-        }
-        else cout <<"YES"<< endl;
+     int n;
+     cin >> n;
+     vector<P> v(n);
+     for(int i = 0; i <n ; i++) cin >> v[i].x >> v[i].y;
+     vector<P> hull = convexHull(v);
+     set<P> ans = {};
+     for(int i =0 ;i < n ; i++){
+          for(int j = 0 ;j < hull.size() ; j++){
+               int k = (j + 1)%hull.size();
+               if(onSegment(hull[j] , hull[k],v[i])) ans.insert(v[i]);
+          }
      }
+     cout << ans.size() << endl;
+     for(P x : ans) cout << x.x <<" "<< x.y << endl;
 }
