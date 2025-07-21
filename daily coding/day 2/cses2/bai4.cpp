@@ -2,6 +2,7 @@
 using namespace std;
 using ll = long long;
 
+#define nen(x) sort(x.begin(), x.end());x.erase(unique(x.begin(), x.end()), x.end());
 struct Event {
     int x, y1, y2, type;
     bool operator<(const Event& e) const {
@@ -75,8 +76,7 @@ int main() {
     }
     
     // Nén tọa độ y
-    sort(y_coords.begin(), y_coords.end());
-    y_coords.erase(unique(y_coords.begin(), y_coords.end()), y_coords.end());
+    nen(y_coords);
     
     // Sắp xếp sự kiện theo x
     sort(events.begin(), events.end());
