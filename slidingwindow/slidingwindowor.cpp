@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
+
 struct AggStack {
     // Each element is stored as (value, current_min)
     stack<pair<ll, ll>> st;
