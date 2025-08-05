@@ -1,55 +1,50 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <queue>
 using namespace std;
+void dfs(int planet);
 
-#define rep(i, a, b) for(int i = a; i < (b); ++i)
-#define all(x) begin(x), end(x)
-#define sz(x) (int)(x).size()
-typedef long long ll;
-typedef pair<int, int> pii;
-typedef vector<int> vi;
+bool visited[200000]{};
+int destinations[200000];
+int pathlength[200000]{};
+queue<int> path;
+int steps = 0;
 
-/**
- * Author: Lukas Polacek
- * Date: 2009-10-28
- * License: CC0
- * Source: Czech graph algorithms book, by Demel. (Tarjan's algorithm)
- * Description: Finds strongly connected components in a
- * directed graph. If vertices u, v$ belong to the same component,
- * we can reach u$ from v$ and vice versa.
- * Usage: scc(graph, [\&](vi\& v) { ... }) visits all components
- * in reverse topological order. comp[i] holds the component
- * index of a node (a component only has edges to components with
- * lower index). ncomps will contain the number of components.
- * Time: O(E + V)
- * Status: Bruteforce-tested for N <= 5
- */
-#pragma once
-
-vi val, comp, z, cont;
-int Time, ncomps;
-template<class G, class F> int dfs(int j, G& g, F& f) {
-      int low = val[j] = ++Time, x; z.push_back(j);
-      for (auto e : g[j]) if (comp[e] < 0)
-            low = min(low, val[e] ?: dfs(e,g,f));
-
-      if (low == val[j]) {
-            do {
-                  x = z.back(); z.pop_back();
-                  comp[x] = ncomps;
-                  cont.push_back(x);
-            } while (x != j);
-            f(cont); cont.clear();
-            ncomps++;
-      }
-      return val[j] = low;
-}
-template<class G, class F> void scc(G& g, F f) {
-      int n = sz(g);
-      val.assign(n, 0); comp.assign(n, -1);
-      Time = ncomps = 0;
-      rep(i,0,n) if (comp[i] < 0) dfs(i, g, f);
-}
 int main() {
-     cin.tie(0)->sync_with_stdio(0);
-     cin.exceptions(cin.failbit);
+	int n;
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		cin >> destinations[i];
+		destinations[i]--;
+	}
+	for (int i = 0; i < n; i++) {
+		if (!visited[i]) {
+			steps = 0;
+			dfs(i);
+			int decrement = 1;
+			// for each planet in current path, calculate pathlength
+			while (!path.empty()) {
+				// we are in the cycle; all nodes have same pathlength
+				if (path.front() == path.back()) { decrement = 0; }
+				pathlength[path.front()] = steps;
+				steps -= decrement;
+				path.pop();
+			}
+		}
+	}
+	for (int i = 0; i < n; i++) { cout << pathlength[i] << " "; }
+	cout << endl;
+	return 0;
+}
+
+void dfs(int planet) {
+	// add planet to path
+	path.push(planet);
+	if (visited[planet]) {
+		// add pathlength of the repeat planet to current step count
+		steps += pathlength[planet];
+		return;
+	}
+	visited[planet] = true;
+	steps++;
+	dfs(destinations[planet]);
 }

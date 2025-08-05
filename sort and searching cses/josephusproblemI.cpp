@@ -4,11 +4,13 @@ using namespace std;
 int main() {
     int n;
     cin >> n;
-    vector<int> order;
-    int res = 0; // Josephus(n, k=2) tính từ 0
-    for (int i = 2; i <= n; i++) {
-        res = (res + 2) % i;
-        order.push_back(res + 1); // Chuyển sang đếm từ 1
+    queue<int> q;
+    for(int i = 1; i <= n ;i++) q.push(i);
+    for(int i = 0 ;i <n ; i++){
+        int k = q.front();
+        q.pop();
+        q.push(k);
+        cout << q.front()<< " ";
+        q.pop();
     }
-    for (int x : order) cout << x << " ";
 }
